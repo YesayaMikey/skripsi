@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "508623734410",
+    "project_id": "pchg-ff30c",
+    "storage_bucket": "pchg-ff30c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:508623734410:android:f4a9a6d9aec32fef58cf73",
+        "android_client_info": {
+          "package_name": "com.example.app_skripsi"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "508623734410-8l42l40ue06ot434r4hm7un00vb9mpr6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC3Ves7sRJiIIsTj6OjLU2LS5EiCYyAxG8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "508623734410-8l42l40ue06ot434r4hm7un00vb9mpr6.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "508623734410-2ce809iq47updvv300avggvgkqskn9el.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.appSkripsi"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
