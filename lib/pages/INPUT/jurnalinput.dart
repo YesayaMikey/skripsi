@@ -2,6 +2,8 @@ import 'package:app_skripsi/pages/productlist/productlist.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
+import '../../service/data_services.dart';
+
 class jurnal extends StatefulWidget {
   final String selectProduct;
   const jurnal({super.key, required this.selectProduct});
@@ -18,6 +20,8 @@ class _jurnalState extends State<jurnal> {
   String selectedProductName = "";
   String hintTextHarga = "";
   String hintTextJmlh = "";
+  bool isUpdateProduct = false;
+  final _formstate = GlobalKey<FormState>();
 
   List<String> productListName = <String>["pilih"];
 
@@ -35,7 +39,7 @@ class _jurnalState extends State<jurnal> {
 
     setState(() {
       hintTextHarga = product['product_price'];
-      hintTextJmlh = product['total_product'].toString();
+      // hintTextJmlh = product['total_product'].toString();
     });
   }
 
@@ -141,6 +145,30 @@ class _jurnalState extends State<jurnal> {
                   keyboardType: TextInputType.number,
                   controller: jmlbrng,
                 ),
+                isUpdateProduct
+                    ? CircularProgressIndicator()
+                    : ElevatedButton(
+                        onPressed: () async {
+                          if (_formstate.currentState!.validate()) {
+                            setState(() {
+                              isUpdateProduct = true;
+                            });
+
+                            // buat function update data product
+                            await DataServices.updateprduct(
+                              dropdownValue: dropdownValue,
+                              jmlbrng: int.parse(jmlbrng.text),
+                            );
+                            null;
+
+                            setState(() {
+                              isUpdateProduct = false;
+                            });
+
+                            Navigator.pop(context);
+                          }
+                        },
+                        child: Text('submit'))
               ],
             );
           }),

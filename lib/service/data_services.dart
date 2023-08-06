@@ -7,6 +7,17 @@ class DataServices {
   static CollectionReference products =
       FirebaseFirestore.instance.collection('products');
 
+  static CollectionReference jurnal =
+      FirebaseFirestore.instance.collection('jurnal');
+
+  static Future<void> updateprduct(
+      {required String dropdownValue, required int jmlbrng}) {
+    return jurnal.add({
+      'Productname': dropdownValue,
+      'qty': jmlbrng,
+    });
+  }
+
   static Future<void> addProduct({
     required String nameProduct,
     required String productPrice,
