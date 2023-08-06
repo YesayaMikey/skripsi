@@ -12,10 +12,13 @@ class DataServices {
 
   static Future<void> updateprduct(
       {required String dropdownValue, required int jmlbrng}) {
-    return jurnal.add({
-      'Productname': dropdownValue,
-      'qty': jmlbrng,
-    });
+    return jurnal
+        .add({
+          'Productname': dropdownValue,
+          'qty': jmlbrng,
+        })
+        .then((value) => debugPrint("jurnal Added"))
+        .catchError((error) => debugPrint("Failed to add jurnal: $error"));
   }
 
   static Future<void> addProduct({

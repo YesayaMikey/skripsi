@@ -97,79 +97,81 @@ class _jurnalState extends State<jurnal> {
                 );
               }
             }
-            return Column(
-              children: [
-                DropdownButton<String>(
-                  // isDense: true,
-                  isExpanded: true,
-                  value: dropdownValue,
-                  items: productListName
-                      .map((e) => DropdownMenuItem<String>(
-                            value: e,
-                            child: Text(e),
-                          ))
-                      .toList(),
-                  onChanged: (String? value) async {
-                    debugPrint("apa ya yang dipilih? $value");
-                    // This is called when the user selects an item.
-                    setState(() {
-                      dropdownValue = value!;
-                    });
+            return Form(
+              key: _formstate,
+              child: Column(
+                children: [
+                  DropdownButton<String>(
+                    // isDense: true,
+                    isExpanded: true,
+                    value: dropdownValue,
+                    items: productListName
+                        .map((e) => DropdownMenuItem<String>(
+                              value: e,
+                              child: Text(e),
+                            ))
+                        .toList(),
+                    onChanged: (String? value) async {
+                      debugPrint("apa ya yang dipilih? $value");
+                      // This is called when the user selects an item.
+                      setState(() {
+                        dropdownValue = value!;
+                      });
 
-                    if (dropdownValue != "pilih") {
-                      await getCurrentHargaDanQty(
-                          productSelectedName: dropdownValue);
-                    }
-                  },
-                ),
-                TextFormField(
-                  decoration: InputDecoration(
-                    hintText:
-                        hintTextHarga.isNotEmpty ? hintTextHarga : 'harga',
+                      if (dropdownValue != "pilih") {
+                        await getCurrentHargaDanQty(
+                            productSelectedName: dropdownValue);
+                      }
+                    },
                   ),
-                  controller: hrgbrng,
-                ),
-                TextFormField(
-                  // ignore: body_might_complete_normally_nullable
-                  validator: (value) {
-                    if (value == '') {
-                      return "wajib isi";
-                    }
-                  },
-                  decoration: InputDecoration(
-                    hintText: hintTextJmlh.isNotEmpty
-                        ? hintTextJmlh
-                        : 'jumlah barang',
-                    border: OutlineInputBorder(),
+                  TextFormField(
+                    decoration: InputDecoration(
+                      hintText:
+                          hintTextHarga.isNotEmpty ? hintTextHarga : 'harga',
+                    ),
+                    controller: hrgbrng,
                   ),
-                  keyboardType: TextInputType.number,
-                  controller: jmlbrng,
-                ),
-                isUpdateProduct
-                    ? CircularProgressIndicator()
-                    : ElevatedButton(
-                        onPressed: () async {
-                          if (_formstate.currentState!.validate()) {
-                            setState(() {
-                              isUpdateProduct = true;
-                            });
+                  TextFormField(
+                    // ignore: body_might_complete_normally_nullable
+                    validator: (value) {
+                      if (value == '') {
+                        return "wajib isi";
+                      }
+                    },
+                    decoration: InputDecoration(
+                      hintText: hintTextJmlh.isNotEmpty
+                          ? hintTextJmlh
+                          : 'jumlah barang',
+                      border: OutlineInputBorder(),
+                    ),
+                    keyboardType: TextInputType.number,
+                    controller: jmlbrng,
+                  ),
+                  isUpdateProduct
+                      ? CircularProgressIndicator()
+                      : ElevatedButton(
+                          onPressed: () async {
+                            if (_formstate.currentState!.validate()) {
+                              setState(() {
+                                isUpdateProduct = true;
+                              });
 
-                            // buat function update data product
-                            await DataServices.updateprduct(
-                              dropdownValue: dropdownValue,
-                              jmlbrng: int.parse(jmlbrng.text),
-                            );
-                            null;
+                              // buat function update data product
+                              await DataServices.updateprduct(
+                                dropdownValue: dropdownValue,
+                                jmlbrng: int.parse(jmlbrng.text),
+                              );
 
-                            setState(() {
-                              isUpdateProduct = false;
-                            });
+                              setState(() {
+                                isUpdateProduct = false;
+                              });
 
-                            Navigator.pop(context);
-                          }
-                        },
-                        child: Text('submit'))
-              ],
+                              Navigator.pop(context);
+                            }
+                          },
+                          child: Text('submit'))
+                ],
+              ),
             );
           }),
     );
