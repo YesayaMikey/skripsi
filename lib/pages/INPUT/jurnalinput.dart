@@ -16,43 +16,51 @@ class _jurnalState extends State<jurnal> {
   TextEditingController hrgbrng = TextEditingController();
   String dropdownValue = "pilih";
   String selectedProductName = "";
+  String hintTextHarga = "";
+  String hintTextJmlh = "";
 
   List<String> productListName = <String>["pilih"];
+
+  Future<void> getCurrentHargaDanQty(
+      {required String productSelectedName}) async {
+    final productSelectedData = await FirebaseFirestore.instance
+        // QUERY DI COLLLECTION PAKAI WHERE
+        .collection('products')
+        .where('product_name', isEqualTo: productSelectedName)
+        .get();
+
+    final product = productSelectedData.docs.first.data();
+
+    debugPrint("Product get ==> ${productSelectedData.docs.first.data()}");
+
+    setState(() {
+      hintTextHarga = product['product_price'];
+      hintTextJmlh = product['total_product'].toString();
+    });
+  }
+
   // get docID
   Future<List<QueryDocumentSnapshot<Map<String, dynamic>>>>
       getProductListByName({required String productName}) async {
-    if (productName.isEmpty) {
-      return await FirebaseFirestore.instance
-          // QUERY DI COLLLECTION PAKAI WHERE
-          .collection('products')
-          .orderBy('date_input', descending: true)
-          .get()
-          .then((snapshot) => snapshot.docs);
-    }
     return await FirebaseFirestore.instance
         // QUERY DI COLLLECTION PAKAI WHERE
         .collection('products')
         .orderBy('date_input', descending: true)
-        .where(
-          "product_name",
-          isEqualTo: productName,
-        )
         .get()
         .then((snapshot) => snapshot.docs);
-    // {
-    //   return await FirebaseFirestore.instance
-    //       // QUERY DI COLLLECTION PAKAI WHERE
-    //       .collection('products')
-    //       .where(TextEditingController.fromValue(value), isEqualTo: productName)
-    //       .get()
-    //       .then((snapshot) => snapshot.docs);
-    // }
   }
 
   @override
   void initState() {
     setState(() {
       selectedProductName = widget.selectProduct;
+    });
+
+    Future.delayed(const Duration(milliseconds: 50), () async {
+      if (selectedProductName.isNotEmpty) {
+        dropdownValue = selectedProductName;
+        await getCurrentHargaDanQty(productSelectedName: selectedProductName);
+      }
     });
 
     super.initState();
@@ -78,38 +86,45 @@ class _jurnalState extends State<jurnal> {
               for (var data in dataProduct) {
                 productListName.add(
                   data['product_name'],
+                  //   DropdownMenuItem(
+                  //   value: data['product_name'],
+                  //   child: Text(data['product_name']),
+                  // )
                 );
               }
-              for (var data in hrgbrng) {
-                productListName.add(data['product_price']);
-              }
-              ;
             }
             return Column(
               children: [
                 DropdownButton<String>(
-                    // isDense: true,
-                    isExpanded: true,
-                    value: dropdownValue,
-                    items: productListName
-                        .map((e) => DropdownMenuItem<String>(
-                              value: e,
-                              child: Text(e),
-                            ))
-                        .toList(),
-                    onChanged: (String? value) {
-                      debugPrint("apa ya yang dipilih? $value");
-                      // This is called when the user selects an item.
-                      setState(() {
-                        dropdownValue = value!;
-                      });
-                    }),
-                // TextFormField(
-                //   decoration: InputDecoration(
-                //     hintText: ValueKey(),
-                //   ),
-                //   controller: hrgbrng,
-                // ),
+                  // isDense: true,
+                  isExpanded: true,
+                  value: dropdownValue,
+                  items: productListName
+                      .map((e) => DropdownMenuItem<String>(
+                            value: e,
+                            child: Text(e),
+                          ))
+                      .toList(),
+                  onChanged: (String? value) async {
+                    debugPrint("apa ya yang dipilih? $value");
+                    // This is called when the user selects an item.
+                    setState(() {
+                      dropdownValue = value!;
+                    });
+
+                    if (dropdownValue != "pilih") {
+                      await getCurrentHargaDanQty(
+                          productSelectedName: dropdownValue);
+                    }
+                  },
+                ),
+                TextFormField(
+                  decoration: InputDecoration(
+                    hintText:
+                        hintTextHarga.isNotEmpty ? hintTextHarga : 'harga',
+                  ),
+                  controller: hrgbrng,
+                ),
                 TextFormField(
                   // ignore: body_might_complete_normally_nullable
                   validator: (value) {
@@ -118,12 +133,14 @@ class _jurnalState extends State<jurnal> {
                     }
                   },
                   decoration: InputDecoration(
-                    hintText: 'jumlah barang',
+                    hintText: hintTextJmlh.isNotEmpty
+                        ? hintTextJmlh
+                        : 'jumlah barang',
                     border: OutlineInputBorder(),
                   ),
                   keyboardType: TextInputType.number,
                   controller: jmlbrng,
-                )
+                ),
               ],
             );
           }),

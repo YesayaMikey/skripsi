@@ -39,15 +39,18 @@ class _ProductlistState extends State<Productlist> {
         backgroundColor: Colors.orange,
         actions: [
           IconButton(
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => jurnal(
-                              selectProduct: "",
-                            )));
-              },
-              icon: Icon(Icons.history))
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => jurnal(
+                            selectProduct: "",
+                          )));
+            },
+            icon: Icon(
+              Icons.content_paste_search_rounded,
+            ),
+          )
         ],
       ),
       body: FutureBuilder(
