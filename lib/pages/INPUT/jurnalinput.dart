@@ -17,16 +17,19 @@ class _jurnalState extends State<jurnal> {
   TextEditingController jmlbrng = TextEditingController();
   TextEditingController hrgbrng = TextEditingController();
   String dropdownValue = "pilih";
+  String splitvalue = "pilih";
   String selectedProductName = "";
   String hintTextHarga = "";
   String hintTextJmlh = "";
+  DateTime? inputDate;
   bool isUpdateProduct = false;
   final _formstate = GlobalKey<FormState>();
 
   List<String> productListName = <String>["pilih"];
 
-  Future<void> getCurrentHargaDanQty(
-      {required String productSelectedName}) async {
+  Future<void> getCurrentHargaDanQty({
+    required String productSelectedName,
+  }) async {
     final productSelectedData = await FirebaseFirestore.instance
         // QUERY DI COLLLECTION PAKAI WHERE
         .collection('products')
@@ -63,7 +66,9 @@ class _jurnalState extends State<jurnal> {
     Future.delayed(const Duration(milliseconds: 50), () async {
       if (selectedProductName.isNotEmpty) {
         dropdownValue = selectedProductName;
-        await getCurrentHargaDanQty(productSelectedName: selectedProductName);
+        await getCurrentHargaDanQty(
+          productSelectedName: selectedProductName,
+        );
       }
     });
 
@@ -90,10 +95,6 @@ class _jurnalState extends State<jurnal> {
               for (var data in dataProduct) {
                 productListName.add(
                   data['product_name'],
-                  //   DropdownMenuItem(
-                  //   value: data['product_name'],
-                  //   child: Text(data['product_name']),
-                  // )
                 );
               }
             }
@@ -120,10 +121,34 @@ class _jurnalState extends State<jurnal> {
 
                       if (dropdownValue != "pilih") {
                         await getCurrentHargaDanQty(
-                            productSelectedName: dropdownValue);
+                          productSelectedName: dropdownValue,
+                        );
                       }
                     },
                   ),
+                  DropdownButton<String>(
+                      value: splitvalue,
+                      items: [
+                        DropdownMenuItem(
+                          value: "pilih",
+                          child: Text("pilih"),
+                        ),
+                        DropdownMenuItem(
+                          value: "kurangi",
+                          child: Text("kurangi"),
+                        ),
+                        DropdownMenuItem(
+                          value: "tambahkan",
+                          child: Text("tambahkan"),
+                        ),
+                      ],
+                      onChanged: (String? value) {
+                        debugPrint("apa ya yang dipilih? $value");
+                        // This is called when the user selects an item.
+                        setState(() {
+                          splitvalue = value!;
+                        });
+                      }),
                   TextFormField(
                     decoration: InputDecoration(
                       hintText:
@@ -147,6 +172,16 @@ class _jurnalState extends State<jurnal> {
                     keyboardType: TextInputType.number,
                     controller: jmlbrng,
                   ),
+                  ElevatedButton(
+                    onPressed: () {
+                      chooseDate();
+                    },
+                    child: Text('Pilih Tanggal'),
+                  ),
+                  inputDate != null
+                      ? Text(
+                          "${inputDate?.day} - ${inputDate?.month} - ${inputDate?.year}")
+                      : const SizedBox(),
                   isUpdateProduct
                       ? CircularProgressIndicator()
                       : ElevatedButton(
@@ -157,10 +192,32 @@ class _jurnalState extends State<jurnal> {
                               });
 
                               // buat function update data product
-                              await DataServices.updateprduct(
-                                dropdownValue: dropdownValue,
-                                jmlbrng: int.parse(jmlbrng.text),
-                              );
+
+                              if (splitvalue == 'tambahkan') {
+                                await DataServices.brg_masuk(
+                                  nameProduct: dropdownValue,
+                                  productPrice: (hrgbrng.text),
+                                  totalProduct: int.parse(jmlbrng.text),
+                                  dateInput: inputDate!,
+                                );
+                                await DataServices.updateprduct(
+                                  dropdownValue: dropdownValue,
+                                  jmlbrng: int.parse(jmlbrng.text),
+                                  dateInput: inputDate!,
+                                );
+                              } else if (splitvalue == 'kurangi') {
+                                await DataServices.updateprduct(
+                                  dropdownValue: dropdownValue,
+                                  jmlbrng: int.parse(jmlbrng.text),
+                                  dateInput: inputDate!,
+                                );
+                                await DataServices.brg_keluar(
+                                  nameProduct: dropdownValue,
+                                  productPrice: (hrgbrng.text),
+                                  totalProduct: int.parse(jmlbrng.text),
+                                  dateInput: inputDate!,
+                                );
+                              }
 
                               setState(() {
                                 isUpdateProduct = false;
@@ -169,11 +226,28 @@ class _jurnalState extends State<jurnal> {
                               Navigator.pop(context);
                             }
                           },
-                          child: Text('submit'))
+                          child: Text('Update'))
                 ],
               ),
             );
           }),
     );
+  }
+
+  void chooseDate() async {
+    final DateTime? choosenDate = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2017),
+      lastDate: DateTime(2050),
+    );
+
+    if (choosenDate != null) {
+      setState(
+        () {
+          inputDate = choosenDate;
+        },
+      );
+    }
   }
 }
