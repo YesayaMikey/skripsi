@@ -1,3 +1,6 @@
+import 'dart:ffi';
+import 'dart:html';
+
 import 'package:app_skripsi/pages/productlist/productlist.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +11,6 @@ class jurnal extends StatefulWidget {
   final String selectProduct;
   const jurnal({super.key, required this.selectProduct});
   static String path = "/jurnal";
-
   @override
   State<jurnal> createState() => _jurnalState();
 }
@@ -21,11 +23,32 @@ class _jurnalState extends State<jurnal> {
   String selectedProductName = "";
   String hintTextHarga = "";
   String hintTextJmlh = "";
+  String Textjmlh = "";
+  var Nbaru = int;
+  int result = 0;
+  int num1 = 0;
+  int num2 = 0;
   DateTime? inputDate;
   bool isUpdateProduct = false;
   final _formstate = GlobalKey<FormState>();
-
   List<String> productListName = <String>["pilih"];
+  // add() {
+  //   setState(() {
+  //     num1 = int.parse(jmlbrng.text);
+  //     num1 = int.parse(hintTextJmlh);
+  //     result = num1 + num2;
+  //     debugPrint('dapet nilainya $result');
+  //   });
+  // }
+
+  // min() {
+  //   setState(() {
+  //     num1 = int.parse(jmlbrng.text);
+  //     num1 = int.parse(hintTextJmlh);
+  //     result = num1 - num2;
+  //     debugPrint('dapet nilainya $result');
+  //   });
+  // }
 
   Future<void> getCurrentHargaDanQty({
     required String productSelectedName,
@@ -42,7 +65,7 @@ class _jurnalState extends State<jurnal> {
 
     setState(() {
       hintTextHarga = product['product_price'];
-      // hintTextJmlh = product['total_product'].toString();
+      hintTextJmlh = product['total_product'].toString();
     });
   }
 
@@ -157,6 +180,7 @@ class _jurnalState extends State<jurnal> {
                     controller: hrgbrng,
                   ),
                   TextFormField(
+                    onChanged: (value) {},
                     // ignore: body_might_complete_normally_nullable
                     validator: (value) {
                       if (value == '') {
@@ -194,6 +218,10 @@ class _jurnalState extends State<jurnal> {
                               // buat function update data product
 
                               if (splitvalue == 'tambahkan') {
+                                num1 = int.parse(hintTextJmlh);
+                                print('nilai $result');
+                                num2 = int.parse(jmlbrng.text);
+                                result = num1 + num2;
                                 await DataServices.brg_masuk(
                                   nameProduct: dropdownValue,
                                   productPrice: (hrgbrng.text),
@@ -202,13 +230,17 @@ class _jurnalState extends State<jurnal> {
                                 );
                                 await DataServices.updateprduct(
                                   dropdownValue: dropdownValue,
-                                  jmlbrng: int.parse(jmlbrng.text),
+                                  jmlbrng: result,
                                   dateInput: inputDate!,
                                 );
                               } else if (splitvalue == 'kurangi') {
+                                num1 = int.parse(hintTextJmlh);
+                                print('nilai $result');
+                                num2 = int.parse(jmlbrng.text);
+                                result = num1 - num2;
                                 await DataServices.updateprduct(
                                   dropdownValue: dropdownValue,
-                                  jmlbrng: int.parse(jmlbrng.text),
+                                  jmlbrng: int.parse(result.toString()),
                                   dateInput: inputDate!,
                                 );
                                 await DataServices.brg_keluar(
@@ -224,6 +256,7 @@ class _jurnalState extends State<jurnal> {
                               });
 
                               Navigator.pop(context);
+                              Navigator.pushNamed(context, Productlist.path);
                             }
                           },
                           child: Text('Update'))
