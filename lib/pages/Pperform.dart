@@ -24,9 +24,7 @@ class _PperformState extends State<Pperform> {
         .where('product_name=kapal selam')
         .orderBy('date_input', descending: true)
         .get()
-        .then((snapshot) => snapshot.docs);
-  }
-
+        .then((QuerySnapshot querySnapshot) {querySnapshot.docs.forEach((doc) {});});
   @override
   void initState() {
     docjmlh();
