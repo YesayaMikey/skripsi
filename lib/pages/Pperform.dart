@@ -16,7 +16,7 @@ class _PperformState extends State<Pperform> {
   String nmbrng = "";
   String displayjmlh = "";
 
-  Future docjmlh() async {
+  Future<List<QueryDocumentSnapshot<Map<String, dynamic>>>> docjmlh() async {
     return await FirebaseFirestore.instance
 
         // QUERY DI COLLLECTION PAKAI WHERE
@@ -45,7 +45,15 @@ class _PperformState extends State<Pperform> {
           children: [
             Text('tets'),
             Row(
-              children: [Text('nama barang=jumlah barang')],
+              children: [
+                Text('nama barang=jumlah barang'),
+                ElevatedButton(
+                    onPressed: () async {
+                      final res = await docjmlh();
+                      debugPrint("resultnyanya apa? $res");
+                    },
+                    child: Text('press'))
+              ],
             )
           ],
         ));
