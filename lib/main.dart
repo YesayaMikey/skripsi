@@ -1,6 +1,7 @@
 import 'package:app_skripsi/firebase_options.dart';
 import 'package:app_skripsi/pages/INPUT/jurnalinput.dart';
 import 'package:app_skripsi/pages/INPUT/productinput.dart';
+import 'package:app_skripsi/pages/Pperform.dart';
 import 'package:app_skripsi/pages/mainpage.dart';
 import 'package:app_skripsi/pages/productlist/productlist.dart';
 import 'package:app_skripsi/pages/splashScreenPage.dart';
@@ -50,6 +51,7 @@ class MyApp extends StatelessWidget {
         Productlist.path: (context) => const Productlist(),
         ProductInput.path: (context) => const ProductInput(),
         jurnal.path: (context) => const jurnal(selectProduct: ""),
+        Pperform.path: (context) => const Pperform(),
       },
     );
   }

@@ -1,5 +1,6 @@
 import 'package:app_skripsi/main.dart';
 import 'package:app_skripsi/pages/INPUT/productinput.dart';
+import 'package:app_skripsi/pages/Pperform.dart';
 import 'package:app_skripsi/pages/productlist/productlist.dart';
 import 'package:app_skripsi/service/login_service.dart';
 import 'package:flutter/material.dart';
@@ -52,7 +53,9 @@ class _MainPageState extends State<MainPage> {
                   borderRadius: BorderRadius.circular(30),
                 ),
               ),
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pushNamed(context, Pperform.path);
+              },
               child: const Text('Product Performance'),
             ),
             ElevatedButton(

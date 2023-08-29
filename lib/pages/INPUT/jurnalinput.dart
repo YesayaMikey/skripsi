@@ -1,5 +1,5 @@
 import 'dart:ffi';
-import 'dart:html';
+// import 'dart:html';
 
 import 'package:app_skripsi/pages/productlist/productlist.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -32,23 +32,6 @@ class _jurnalState extends State<jurnal> {
   bool isUpdateProduct = false;
   final _formstate = GlobalKey<FormState>();
   List<String> productListName = <String>["pilih"];
-  // add() {
-  //   setState(() {
-  //     num1 = int.parse(jmlbrng.text);
-  //     num1 = int.parse(hintTextJmlh);
-  //     result = num1 + num2;
-  //     debugPrint('dapet nilainya $result');
-  //   });
-  // }
-
-  // min() {
-  //   setState(() {
-  //     num1 = int.parse(jmlbrng.text);
-  //     num1 = int.parse(hintTextJmlh);
-  //     result = num1 - num2;
-  //     debugPrint('dapet nilainya $result');
-  //   });
-  // }
 
   Future<void> getCurrentHargaDanQty({
     required String productSelectedName,
@@ -209,56 +192,59 @@ class _jurnalState extends State<jurnal> {
                   isUpdateProduct
                       ? CircularProgressIndicator()
                       : ElevatedButton(
-                          onPressed: () async {
-                            if (_formstate.currentState!.validate()) {
-                              setState(() {
-                                isUpdateProduct = true;
-                              });
+                          onPressed: inputDate == null
+                              ? null
+                              : () async {
+                                  if (_formstate.currentState!.validate()) {
+                                    setState(() {
+                                      isUpdateProduct = true;
+                                    });
 
-                              // buat function update data product
+                                    // buat function update data product
 
-                              if (splitvalue == 'tambahkan') {
-                                num1 = int.parse(hintTextJmlh);
-                                print('nilai $result');
-                                num2 = int.parse(jmlbrng.text);
-                                result = num1 + num2;
-                                await DataServices.brg_masuk(
-                                  nameProduct: dropdownValue,
-                                  productPrice: (hrgbrng.text),
-                                  totalProduct: int.parse(jmlbrng.text),
-                                  dateInput: inputDate!,
-                                );
-                                await DataServices.updateprduct(
-                                  dropdownValue: dropdownValue,
-                                  jmlbrng: result,
-                                  dateInput: inputDate!,
-                                );
-                              } else if (splitvalue == 'kurangi') {
-                                num1 = int.parse(hintTextJmlh);
-                                print('nilai $result');
-                                num2 = int.parse(jmlbrng.text);
-                                result = num1 - num2;
-                                await DataServices.updateprduct(
-                                  dropdownValue: dropdownValue,
-                                  jmlbrng: int.parse(result.toString()),
-                                  dateInput: inputDate!,
-                                );
-                                await DataServices.brg_keluar(
-                                  nameProduct: dropdownValue,
-                                  productPrice: (hrgbrng.text),
-                                  totalProduct: int.parse(jmlbrng.text),
-                                  dateInput: inputDate!,
-                                );
-                              }
+                                    if (splitvalue == 'tambahkan') {
+                                      num1 = int.parse(hintTextJmlh);
+                                      print('nilai $result');
+                                      num2 = int.parse(jmlbrng.text);
+                                      result = num1 + num2;
+                                      await DataServices.brg_masuk(
+                                        nameProduct: dropdownValue,
+                                        productPrice: (hrgbrng.text),
+                                        totalProduct: int.parse(jmlbrng.text),
+                                        dateInput: inputDate!,
+                                      );
+                                      await DataServices.updateprduct(
+                                        dropdownValue: dropdownValue,
+                                        jmlbrng: result,
+                                        dateInput: inputDate!,
+                                      );
+                                    } else if (splitvalue == 'kurangi') {
+                                      num1 = int.parse(hintTextJmlh);
+                                      print('nilai $result');
+                                      num2 = int.parse(jmlbrng.text);
+                                      result = num1 - num2;
+                                      await DataServices.updateprduct(
+                                        dropdownValue: dropdownValue,
+                                        jmlbrng: int.parse(result.toString()),
+                                        dateInput: inputDate!,
+                                      );
+                                      await DataServices.brg_keluar(
+                                        nameProduct: dropdownValue,
+                                        productPrice: (hrgbrng.text),
+                                        totalProduct: int.parse(jmlbrng.text),
+                                        dateInput: inputDate!,
+                                      );
+                                    }
 
-                              setState(() {
-                                isUpdateProduct = false;
-                              });
+                                    setState(() {
+                                      isUpdateProduct = false;
+                                    });
 
-                              Navigator.pop(context);
-                              Navigator.pushNamed(context, Productlist.path);
-                            }
-                          },
+                                    Navigator.pop(context);
+                                    Navigator.pushNamed(
+                                        context, Productlist.path);
+                                  }
+                                },
                           child: Text('Update'))
                 ],
               ),

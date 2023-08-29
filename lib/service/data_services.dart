@@ -4,6 +4,9 @@ import 'package:flutter/foundation.dart';
 class DataServices {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
+  static CollectionReference listbarangkeluar =
+      FirebaseFirestore.instance.collection('barang_keluar');
+
   static CollectionReference brgmasuk =
       FirebaseFirestore.instance.collection('barang_masuk');
 
@@ -111,5 +114,16 @@ class DataServices {
         })
         .then((value) => debugPrint("brgkeluar Added"))
         .catchError((error) => debugPrint("Failed to add brgkeluar: $error"));
+  }
+
+  static Future<void> list_barangkeluar(
+      {required String nmbrng, required String displayjmlh}) async {
+    final listkeluar = await FirebaseFirestore.instance
+        // QUERY DI COLLLECTION PAKAI WHERE
+        .collection('barang_keluar')
+        .where('product_name', isEqualTo: 'kapal selam')
+        .get();
+    final productid = listkeluar.docs.first.id;
+    debugPrint("id document -> $productid");
   }
 }
