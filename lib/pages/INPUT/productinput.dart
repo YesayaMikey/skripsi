@@ -92,29 +92,6 @@ class _ProductInputState extends State<ProductInput> {
                 keyboardType: TextInputType.number,
                 controller: ctrljmlhbarang,
               ),
-              // DropdownButton<String>(
-              //     value: dropdownValue,
-              //     items: [
-              //       DropdownMenuItem(
-              //         value: "pilih",
-              //         child: Text("pilih"),
-              //       ),
-              //       DropdownMenuItem(
-              //         value: "kurangi",
-              //         child: Text("kurangi"),
-              //       ),
-              //       DropdownMenuItem(
-              //         value: "tambahkan",
-              //         child: Text("tambahkan"),
-              //       ),
-              //     ],
-              //     onChanged: (String? value) {
-              //       debugPrint("apa ya yang dipilih? $value");
-              //       // This is called when the user selects an item.
-              //       setState(() {
-              //         dropdownValue = value!;
-              //       });
-              //     }),
               ElevatedButton(
                 onPressed: () {
                   pickGalleryImage();

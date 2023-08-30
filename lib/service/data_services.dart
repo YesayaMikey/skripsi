@@ -126,4 +126,43 @@ class DataServices {
     final productid = listkeluar.docs.first.id;
     debugPrint("id document -> $productid");
   }
+
+  static Future<List<String>> fetchDesiredFieldValues() async {
+    var collectionName = 'products'; // Replace with the actual collection name
+    var fieldName = 'product_name'; // Replace with the actual field name
+    QuerySnapshot<Map<String, dynamic>> snapshot =
+        await FirebaseFirestore.instance.collection(collectionName).get();
+
+    List<String> values = [];
+    for (var doc in snapshot.docs) {
+      values.add(doc[fieldName] as String);
+    }
+    return values;
+  }
+
+  static Future<List<QueryDocumentSnapshot<Map<String, dynamic>>>>
+      docjmlh() async {
+    var collectionName = 'barang_keluar';
+    var fieldName = 'product_name';
+    List<String> desiredFieldValues = await fetchDesiredFieldValues();
+    return await FirebaseFirestore.instance
+        // QUERY DI COLLLECTION PAKAI WHERE
+        .collection(collectionName)
+        .where(fieldName, whereIn: desiredFieldValues)
+        .get()
+        .then((QuerySnapshot) => QuerySnapshot.docs);
+  }
+
+  static Future<List<QueryDocumentSnapshot<Map<String, dynamic>>>>
+      docjmlhmasuk() async {
+    var collectionName = 'barang_masuk';
+    var fieldName = 'product_name';
+    List<String> desiredFieldValues = await fetchDesiredFieldValues();
+    return await FirebaseFirestore.instance
+        // QUERY DI COLLLECTION PAKAI WHERE
+        .collection(collectionName)
+        .where(fieldName, whereIn: desiredFieldValues)
+        .get()
+        .then((QuerySnapshot) => QuerySnapshot.docs);
+  }
 }
