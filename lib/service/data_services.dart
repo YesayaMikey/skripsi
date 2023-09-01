@@ -165,4 +165,20 @@ class DataServices {
         .get()
         .then((QuerySnapshot) => QuerySnapshot.docs);
   }
+
+  static Future<String> fetchImageUrl(String productName) async {
+    var collectionName = 'products'; // Update with the actual collection name
+    var fieldName = 'product_name'; // Update with the actual field name
+    var imageUrlField =
+        'image_path'; // Update with the actual image URL field name
+
+    QuerySnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore
+        .instance
+        .collection(collectionName)
+        .where(fieldName, isEqualTo: productName)
+        .get();
+
+    String imageUrl = snapshot.docs[0][imageUrlField];
+    return imageUrl;
+  }
 }
