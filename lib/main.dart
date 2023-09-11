@@ -88,51 +88,37 @@ class _LoginPageState extends State<LoginPage> {
                 height: 20,
               ),
               Text('PCHG Login page'),
-              // TextField(
-              //   decoration: InputDecoration(
-              //       hintText: 'input username', border: OutlineInputBorder()),
-              //   controller: controller,
-              // ),
-              // TextField(
-              //   decoration: InputDecoration(
-              //     hintText: 'input password',
-              //     border: OutlineInputBorder(),
-              //   ),
-              //   controller: controller2,
-              // ),
               ElevatedButton(
-                  onPressed: () {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => MainPage(),
-                      ),
-                    );
+                onPressed: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => MainPage(),
+                    ),
+                  );
 
-                    Navigator.pushReplacementNamed(context, MainPage.path);
-                  },
-                  child: Text('login')),
-
+                  Navigator.pushReplacementNamed(context, MainPage.path);
+                },
+                child: Text('login'),
+              ),
               ElevatedButton(
-                  onPressed: () async {
-                    setState(() {
-                      isLoadingLogin = true;
-                    });
-                    await Loginservice().signInWithGoogle();
-                    // debugPrint("user ada ga? ${userCredential.user}");
-                    Loginservice().handleSignIn(context);
+                onPressed: () async {
+                  setState(() {
+                    isLoadingLogin = true;
+                  });
+                  await Loginservice().signInWithGoogleAndEmail();
+                  Loginservice().handleSignIn(context);
 
-                    setState(() {
-                      isLoadingLogin = false;
-                    });
-
-                    // Navigator.pushReplacementNamed(context, MainPage.path);
-                  },
-                  child: Text('sign in with google')),
+                  setState(() {
+                    isLoadingLogin = false;
+                  });
+                },
+                child: Text('sign in with google'),
+              ),
               SizedBox(
                 height: 20,
               ),
-              isLoadingLogin ? CircularProgressIndicator() : SizedBox()
+              isLoadingLogin ? CircularProgressIndicator() : SizedBox(),
             ],
           ),
         ),

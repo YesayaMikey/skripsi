@@ -1,4 +1,4 @@
-import 'package:app_skripsi/main.dart';
+// import 'package:app_skripsi/main.dart';
 import 'package:app_skripsi/pages/INPUT/productinput.dart';
 import 'package:app_skripsi/pages/Pperform.dart';
 import 'package:app_skripsi/pages/productlist/productlist.dart';
@@ -15,14 +15,6 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-  // @override
-  // void initState() {
-  //   final logoutLogInService = Loginservice();
-  //   logoutLogInService.checkUserStatus(context);
-  //   // TODO: implement initState
-  //   super.initState();
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

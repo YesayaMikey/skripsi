@@ -1,6 +1,7 @@
-import 'dart:ffi';
+// import 'dart:ffi';
 // import 'dart:html';
 
+import 'package:app_skripsi/pages/mainpage.dart';
 import 'package:app_skripsi/pages/productlist/productlist.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -240,7 +241,7 @@ class _jurnalState extends State<jurnal> {
                                       isUpdateProduct = false;
                                     });
 
-                                    Navigator.pop(context);
+                                    Navigator.pushNamed(context, MainPage.path);
                                     Navigator.pushNamed(
                                         context, Productlist.path);
                                   }
