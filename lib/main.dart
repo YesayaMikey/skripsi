@@ -4,7 +4,7 @@ import 'package:app_skripsi/pages/INPUT/productinput.dart';
 import 'package:app_skripsi/pages/Pperform.dart';
 import 'package:app_skripsi/pages/mainpage.dart';
 import 'package:app_skripsi/pages/productlist/productlist.dart';
-import 'package:app_skripsi/pages/splashScreenPage.dart';
+// import 'package:app_skripsi/pages/splashScreenPage.dart';
 import 'package:app_skripsi/service/login_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
